@@ -1,292 +1,432 @@
-# Logistics management
+B2B LOGISTICS MANAGEMENT PLATFORM
+Final System Design & Workflow Document
+1. INTRODUCTION
 
- # B2B LOGISTICS PLATFORM
+The B2B Logistics Management Platform is an enterprise-grade, role-based web application designed to manage end-to-end logistics operations for businesses. The system integrates businesses, logistics managers, warehouses, drivers, and administrators into a single, secure, and auditable platform.
 
-## Proper Final Working & Functional Document
+The platform focuses on shipment lifecycle management, operational coordination, warehouse processing, driver execution, controlled payments, and audit-based accountability, closely reflecting real-world B2B logistics systems used in the industry.
 
----
+2. OBJECTIVES OF THE SYSTEM
 
-## 1. INTRODUCTION
+Centralize logistics operations on a single platform
 
-The **B2B Logistics Platform** is an enterprise-level, role-based web application designed to manage complete logistics operations for business customers. The platform integrates businesses, logistics managers, warehouses (including third-party warehouses), and administrators into a single controlled system to ensure secure, trackable, and efficient movement of goods.
+Enable secure onboarding of businesses, warehouses, and drivers
 
-The system is designed with **clear role hierarchy, sub-user management, verification workflows, photo-based inspection, AI-assisted planning, and part-wise payment control**, making it suitable for real-world B2B logistics operations.
+Ensure accountability at every shipment stage
 
----
+Provide real-time shipment tracking
 
-## 2. USER ROLES & HIERARCHY
+Reduce disputes using photo-based verification and audit logs
 
-The platform supports the following roles and sub-roles:
+Enforce part-wise payment control
 
-1. **Admin**
-2. **Logistics Manager**
-3. **Business**
+Support scalable, multi-city logistics operations
 
-   * Business Owner (Primary Account)
-   * Business Manager (Sub-User)
-4. **Warehouse**
+3. USER ROLES & ACCESS HIERARCHY
 
-   * Warehouse Owner (Primary Account)
-   * Warehouse Manager (Sub-User)
-   * Warehouse Employee
+The system supports five primary roles, each with strictly controlled permissions:
 
-Each role has a separate dashboard and strictly controlled permissions.
+Admin
 
----
+Business
 
-## 3. WEBSITE ENTRY & AUTHENTICATION WORKFLOW
+Business Owner
 
-### 3.1 Homepage
+Business Manager (Sub-user)
 
-* Displays company overview, services, and contact information
-* Provides Login option
+Logistics Manager
 
-### 3.2 Login Page
+Warehouse
 
-* User enters credentials
-* Selects role: Admin / Logistics Manager / Business / Warehouse
-* If Warehouse is selected, system asks for sub-role:
+Warehouse Owner
 
-  * Warehouse Owner
-  * Warehouse Manager
-  * Warehouse Employee
-* System verifies approval status
-* User is redirected to role-specific dashboard
+Warehouse Manager
 
----
+Warehouse Employee
 
-## 4. ADMIN MODULE (SYSTEM AUTHORITY)
+Driver
 
-### Role Purpose
+Each role has a dedicated dashboard and role-based access control (RBAC).
 
-Admin acts as the **central authority** responsible for verification, security, and monitoring.
+4. AUTHENTICATION & ACCESS CONTROL
+4.1 Registration Model
 
-### Admin Responsibilities
+Business, Warehouse, and Driver can self-register
 
-* Verify and approve:
+Logistics Managers are created by Admin
 
-  * Business accounts
-  * Logistics managers
-  * Warehouses (company-owned & third-party)
-* Monitor all shipments and warehouse activities
-* View payments, invoices, and audit logs
+Admin does not self-register
 
-### Admin Workflow
+4.2 Verification & Status Lifecycle
 
-1. Admin logs in
-2. Reviews pending registrations
-3. Verifies uploaded documents
-4. Approves or rejects users
-5. Monitors system-wide reports
+All users (except Admin) must be approved before operating.
 
----
+User status:
 
-## 5. BUSINESS MODULE (ORDER OWNER)
+PENDING_VERIFICATION
 
-### 5.1 Business Owner Workflow
+ACTIVE
 
-**Purpose:** Shipment ownership and financial control
+REJECTED
 
-Workflow:
+SUSPENDED
 
-1. Business registers and uploads legal documents
-2. Admin verifies and approves business
-3. Business Owner logs in
-4. Creates shipment order (pickup, drop, parcel details)
-5. Order is sent to Logistics Manager for validation
-6. Receives shipment execution plan
-7. Accepts shipment plan
-8. Adds Business Managers (sub-users)
-9. Controls payments and invoices
+Unverified users cannot perform operations.
 
----
+5. ADMIN MODULE (SYSTEM AUTHORITY)
+5.1 Role Purpose
 
-### 5.2 Business Manager (Sub-User)
+Admin acts as the central governance authority of the platform, responsible for system integrity, security, and compliance.
 
-**Purpose:** Shipment monitoring and coordination
+Admin does not participate in shipment execution.
 
-Capabilities:
+5.2 Admin Responsibilities
 
-* Login through Business panel
-* Track assigned shipments
-* View shipment status and photo proofs
-* Communicate with Logistics Manager
+Verify and approve:
 
-Restrictions:
+Businesses
 
-* Cannot modify shipment plans
-* Cannot make payments
+Warehouses
 
----
+Drivers
 
-## 6. LOGISTICS MANAGER MODULE (PLANNING & CONTROL)
+Create, manage, and control Logistics Manager accounts
 
-### Role Purpose
+Assign roles and permissions
 
-The Logistics Manager acts as the **planner and coordinator** of all shipment operations.
+Suspend or deactivate users
 
-### Logistics Manager Workflow
+Monitor all shipments (read-only)
 
-1. Logs in to Logistics Manager dashboard
-2. Reviews new shipment orders
-3. Analyzes business reliability and shipment details
-4. Uses AI-assisted suggestions for planning
-5. Creates shipment execution plan
-6. Assigns pickup driver, warehouse, and delivery driver
-7. Sends shipment plan to Business Owner
-8. Monitors shipment execution and approvals
+Monitor payments, invoices, and audit logs
 
----
+Handle disputes and compliance checks
 
-## 7. AI-ASSISTED LOGISTICS PLANNING
+5.3 Admin Workflow
 
-The platform includes a **lightweight AI-assisted planning module** to support logistics decisions.
+Admin logs in
 
-### AI Capabilities
+Reviews pending registrations
 
-* Suggest optimal delivery routes
-* Recommend warehouses based on location and capacity
-* Suggest drivers based on availability and performance
-* Indicate risk levels for payment or high-value shipments
+Verifies uploaded documents
 
-### AI Workflow
+Approves / rejects users
 
-1. Shipment order created
-2. AI analyzes historical and operational data
-3. AI suggests shipment plan
-4. Logistics Manager reviews and finalizes plan
+Creates Logistics Manager accounts
 
-Final decision-making authority always remains with the Logistics Manager.
+Monitors system-wide operations
 
----
+5.4 Logistics Manager Creation Flow
 
-## 8. WAREHOUSE MANAGEMENT MODULE (WITH MINI WMS)
+Admin creates Logistics Manager account
 
-The platform supports **company-owned and third-party warehouses**. Each approved warehouse operates a **mini Warehouse Management System (WMS)**.
+Assigns login credentials and operational scope
 
----
+Logistics Manager logs in and becomes active
 
-### 8.1 Warehouse Registration & Verification
+⚠️ Logistics Managers cannot self-register.
 
-1. Warehouse Owner registers warehouse
-2. Uploads warehouse documents and capacity details
-3. Admin verifies and approves warehouse
-4. Warehouse dashboard is activated
+6. BUSINESS MODULE (SHIPMENT OWNER)
+6.1 Business Registration
 
----
+Business self-registers
 
-### 8.2 Warehouse Role Structure
+Uploads legal and business documents
 
-#### Warehouse Owner
+Admin verifies and approves
 
-* Registers warehouse
-* Adds Warehouse Managers
-* Views performance and payment summaries
+Business account becomes ACTIVE
 
-#### Warehouse Manager
+6.2 Business Owner Capabilities
 
-* Manages daily warehouse operations
-* Adds and manages warehouse employees
-* Assigns tasks
-* Tracks employee attendance
-* Approves outbound dispatch
-* Updates parcel status
+Create shipment requests
 
-#### Warehouse Employee
+Define pickup, drop, and parcel details
 
-* Logs in to employee panel
-* Marks attendance (check-in/check-out)
-* Performs assigned parcel handling tasks
+Track shipment lifecycle
 
----
+View photo verification logs
 
-### 8.3 Warehouse Operational Workflow
+Make part-wise payments
 
-1. Parcel arrives at warehouse
-2. Inbound receiving
-3. Condition and loss/damage verification
-4. Sorting and classification
-5. Temporary storage
-6. Outbound dispatch
-7. Status updates at each stage
+Download invoices
 
----
+Add Business Managers (sub-users)
 
-## 9. PHOTO-BASED VERIFICATION & DAMAGE CONTROL
+6.3 Business Manager (Sub-user)
 
-To prevent disputes and ensure accountability, the platform uses **photo-based verification at every critical stage**.
+Purpose: Shipment monitoring and coordination
 
-### Verification Stages
+Can:
 
-* Inbound receiving photo verification
-* Damage inspection photo verification
-* Dispatch photo verification
-* Final delivery photo & OTP/signature verification
+Track shipments
 
-### Approval Flow
+View logs and photo proofs
 
-* Warehouse uploads photos
-* Logistics Manager verifies
-* If damage is detected, Business Manager approval is required
-* Shipment proceeds only after approvals
+Communicate with Logistics Manager
 
-All photos and approvals are logged for audit.
+Cannot:
 
----
+Create or modify shipments
 
-## 10. SHIPMENT EXECUTION FLOW
+Make payments
 
-1. Pickup driver collects parcel
-2. Pickup confirmation recorded
-3. Tracking becomes active
-4. Warehouse processes parcel
-5. Inter-city transport
-6. Destination warehouse processing
-7. Final delivery with proof
+Assign drivers or warehouses
 
----
+7. LOGISTICS MANAGER MODULE (PLANNING & CONTROL)
+7.1 Role Purpose
 
-## 11. PAYMENT & BILLING MODULE
+Logistics Manager is the operational brain of the logistics process.
 
-The system follows a **part-wise payment model**.
+7.2 Responsibilities
 
-### Payment Stages
+Review shipment requests
 
-* Payment after pickup
-* Payment before inter-city transport
-* Final payment before delivery
+Accept or reject shipments
 
-Tracking visibility and shipment continuation depend on payment completion.
+Create complete shipment execution plans
 
-### Billing
+Assign:
 
-* Automatic part-wise invoice generation
-* Final consolidated invoice after delivery
+Drivers
 
----
+Warehouses
 
-## 12. REPORTING, MONITORING & AUDIT
+Monitor execution
 
-* Admin and Logistics Manager can view:
+Handle delays, exceptions, and coordination
 
-  * Shipment reports
-  * Warehouse performance
-  * Payment status
-  * Photo verification logs
-* All actions are timestamped and stored for audit and dispute handling
+7.3 Shipment Planning Workflow
 
----
+Shipment request received
 
-## 13. COMPLETE SYSTEM FLOW SUMMARY
+Feasibility and risk analysis
 
-Homepage → Login → Role-Based Dashboard → Order Creation → AI-Assisted Planning → Shipment Execution → Photo Verification → Tracking → Payment → Invoice → Closure
+AI-assisted planning suggestions displayed
 
----
+Logistics Manager finalizes plan
 
-## 14. CONCLUSION
+Shipment enters execution phase
 
-The finalized B2B Logistics Platform provides a scalable, secure, and enterprise-ready solution for managing modern logistics operations. By combining role-based access, sub-user management, third-party warehouse integration, AI-assisted planning, photo-based verification, and controlled payment workflows, the system closely reflects real-world logistics platforms used in the industry.
+Logistics Manager cannot handle payments.
 
----
+8. DRIVER MODULE (SHIPMENT EXECUTION)
+8.1 Driver Registration
 
-**End of Proper Final Working Document**
+Driver self-registers
+
+Uploads:
+
+Driving license
+
+Vehicle documents
+
+Admin verifies documents
+
+Driver becomes ACTIVE
+
+8.2 Driver Capabilities
+
+View assigned shipments only
+
+Accept or reject assignments
+
+Perform pickup, transport, and delivery
+
+Upload photos at each stage
+
+Enter OTP or signature on final delivery
+
+Drivers cannot:
+
+View payments
+
+Access business details
+
+Modify shipment plans
+
+9. WAREHOUSE MODULE (MINI WMS)
+9.1 Warehouse Registration
+
+Warehouse Owner self-registers
+
+Uploads warehouse documents and capacity details
+
+Admin verifies and approves warehouse
+
+9.2 Warehouse Role Structure
+Warehouse Owner
+
+Defines warehouse workflows
+
+Adds Warehouse Managers
+
+Views warehouse performance and summaries
+
+Warehouse Manager
+
+Manages daily operations
+
+Assigns tasks to employees
+
+Tracks parcel flow
+
+Approves inbound and outbound dispatch
+
+Warehouse Employee
+
+Marks attendance
+
+Performs parcel handling tasks
+
+Updates daily work status
+
+9.3 Warehouse Operational Workflow
+
+Parcel inbound receiving
+
+Inspection and photo verification
+
+Damage reporting
+
+Sorting and storage
+
+Dispatch approval
+
+Outbound handover
+
+10. PHOTO-BASED VERIFICATION SYSTEM
+
+Photo verification is mandatory at all critical stages:
+
+Pickup condition
+
+Warehouse inbound
+
+Damage inspection
+
+Dispatch
+
+Final delivery
+
+Each photo includes:
+
+Timestamp
+
+Location
+
+Uploaded-by role
+
+Approval status
+
+This ensures dispute-free logistics.
+
+11. AI-ASSISTED LOGISTICS PLANNING
+
+AI acts as a decision-support system, not an authority.
+
+AI capabilities:
+
+Route optimization suggestions
+
+Warehouse recommendations
+
+Driver availability and performance scoring
+
+Risk alerts for delays or high-value shipments
+
+Final decision remains with the Logistics Manager.
+
+12. PAYMENT & BILLING SYSTEM
+12.1 Payment Model (Part-wise)
+
+After pickup
+
+Before inter-city transport
+
+Before final delivery
+
+Shipment progression is automatically blocked if payment is pending.
+
+12.2 Billing
+
+Stage-wise invoice generation
+
+Final consolidated invoice after delivery
+
+13. COMMUNICATION & CHAT MODULE
+13.1 Purpose
+
+The in-built chat system enables secure, role-restricted communication within the platform.
+
+13.2 Allowed Communication Channels
+
+Business Manager ↔ Logistics Manager
+
+Logistics Manager ↔ Warehouse Manager
+
+🚫 No direct chat between:
+
+Business ↔ Driver
+
+Business ↔ Warehouse
+
+Driver ↔ Warehouse Employee
+
+13.3 Chat Features
+
+Shipment-linked chat threads
+
+Text messages
+
+Timestamps
+
+Sender role visibility
+
+Read receipts (optional)
+
+13.4 Chat Audit & Control
+
+Chats cannot be deleted by users
+
+Admin has view-only access
+
+Used for dispute resolution and audits
+
+14. AUDIT LOGS & COMPLIANCE
+
+Every system action is logged:
+
+User
+
+Role
+
+Timestamp
+
+Action details
+
+Used for:
+
+Audits
+
+Dispute handling
+
+Performance analysis
+
+15. COMPLETE SHIPMENT LIFECYCLE
+Business creates shipment
+→ Admin verified business
+→ Logistics Manager planning
+↔ Chat (clarifications)
+→ Driver pickup + proof
+→ Warehouse processing
+→ Inter-city transport
+→ Destination warehouse
+→ Final delivery + OTP
+→ Final payment
+→ Invoice generation
+→ Shipment closure
+
+16. CONCLUSION
+
+The B2B Logistics Management Platform provides a secure, scalable, and enterprise-ready solution for managing real-world logistics operations. Through role-based access control, approval workflows, AI-assisted planning, warehouse management, driver execution, photo verification, controlled payments, and audited communication, the platform mirrors professional logistics systems used in the industry.
